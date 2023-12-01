@@ -1,33 +1,15 @@
 <%- include("partials/header.ejs") %>
 
-
+<img class="logo" src="https://cdn.onlinewebfonts.com/svg/img_81173.svg" alt="Dashboard icon">
 <h1>DashBoardSG</h1>
-<script>
-    console.log("This is from display.ejs!";
-</script>
-<% if (selectedDash["PM25"]) { %>
-    <p>
-        PM2.5 is <%= selectedDash["PM25"] %>
-    </p>
-    <% } %>
-    
-<% if (selectedDash["PSI"]) { %>
-    <p>
-        PSI is <%= selectedDash["PSI"] %>
-    </p>
-    <% } %>
-
-<% if (selectedDash["UVI"]) { %>
-    <p>
-        UVI is <%= selectedDash["UVI"] %>
-    </p>
-<% } %>
-
-<% if (selectedDash["Weather"]) { %>
-    <p>
-        Weather is <%= selectedDash["Weather"] %>
-    </p>
-<% } %>
-
+<ul class="grid-container">
+    <% Object.keys(selectedDash).forEach(key => { %>
+      <li class="grid-item">
+        <strong><%= selectedDash[key].title %></strong>
+        <div class="value"><%= selectedDash[key].value %></div>
+        <div class="unit"><%= selectedDash[key].unit %></div>
+      </li>
+    <% }) %>
+</ul>
 
 <%- include("partials/footer.ejs") %>

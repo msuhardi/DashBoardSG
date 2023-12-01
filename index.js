@@ -1,9 +1,8 @@
 import express from "express";
 import bodyParser from "body-parser";
-import fetch from "node-fetch";
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 const currentDateAndTime = new Date();
 
 // Get date and time components
@@ -60,7 +59,6 @@ async function fetchPM25Data() {
       const pm25Json = data;           
       const nearestRegion = getNearestRegion(userLatitude, userLongitude, pm25Json.region_metadata);
       pm25Value = pm25Json.items[0].readings.pm25_one_hourly[nearestRegion.name];
-      console.log('PM2.5 Value:', pm25Value);
     })
     .catch(error => console.error('Error fetching PM25 data:', error));
     return pm25Value;
@@ -73,8 +71,6 @@ async function fetchPsiData() {
       const psiJson = data; // Set the global psiJson variable
       const nearestRegion = getNearestRegion(userLatitude, userLongitude, psiJson.region_metadata);
       psiValue = psiJson.items[0].readings.psi_twenty_four_hourly[nearestRegion.name];
-      console.log('PSI Value:', psiValue);
-      console.log(nearestRegion.name);
     })
     .catch(error => console.error('Error fetching PSI data:', error));
   return psiValue;
@@ -86,7 +82,6 @@ async function fetchUviData() {
     .then(data => {
       const uviJson = data; // Set the global uviJson variable
       uviValue = uviJson.items[0].index[0].value;
-      console.log('UVI Value:', uviValue);
     })
     .catch(error => console.error('Error fetching UVI data:', error));
   return uviValue;
@@ -99,7 +94,6 @@ async function fetchWeatherData() {
       const weatherJson = data; // Set the global uviJson variable
       const nearestArea = getNearestRegion(userLatitude, userLongitude, weatherJson.area_metadata);
       weatherValue = weatherJson.items[0].forecasts.find(area => area.area === nearestArea.name).forecast;
-      console.log('Weather Value:', weatherValue);
     })
     .catch(error => console.error('Error fetching Weather data:', error));
   return weatherValue;
@@ -109,7 +103,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
 app.get("/", (req, res) => {
-  // console.log(req.body);
   res.render("index.ejs");
 });
 
@@ -126,12 +119,33 @@ app.post("/display", async (req, res) => {
   userLatitude = req.body["userLatitude"];
   userLongitude = req.body["userLongitude"];
 
-  if (req.body["PM25"]) { req.body["PM25"] = await fetchPM25Data() };
-  if (req.body["PSI"]) { req.body["PSI"] = await fetchPsiData() };
-  if (req.body["UVI"]) { req.body["UVI"] = await fetchUviData() };
-  if (req.body["Weather"]) { req.body["Weather"] = await fetchWeatherData() };
-
-  res.render("display.ejs", { selectedDash: req.body });
+  const result = {};
+  if (req.body["PM25"]) { result["PM25"] = {
+    title: "PM2.5",
+    value: await fetchPM25Data(),
+    unit: "µg/m3"
+    }
+  };
+  if (req.body["PSI"]) { result["PSI"] = {
+    title: "PSI",
+    value: await fetchPsiData(),
+    unit: "Index"
+    }
+  };
+  if (req.body["UVI"]) { result["UVI"] = {
+    title: "UVI",
+    value: await fetchUviData(),
+    unit: "Index"
+    }
+  };
+  if (req.body["Weather"]) { result["Weather"] = {
+    title: "Weather",
+    value: await fetchWeatherData(),
+    unit: ""
+    }
+  };
+  console.log(result);
+  res.render("display.ejs", { selectedDash: result });
 });
 
 app.listen(port, () => {

@@ -10,6 +10,41 @@
 i {
   margin-right: 10px;
 }
+
+#dash4 {
+  margin-bottom: 50px;
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* Two columns */
+  gap: 20px; /* Increased gap between items for better spacing */
+  list-style: none; /* Remove default list styling */
+}
+
+.grid-item {
+  text-align: center;
+  padding: 15px;
+  border-radius: 15px; /* Rounded corners */
+  background-color: #f0f0f0; /* Background color for the squares */
+  opacity: 0.95;
+}
+
+.grid-item strong {
+  font-size: 1.5em; /* Large font size for headings */
+  color: darkblue;
+}
+
+.grid-item .value {
+  font-size: 3em; /* Larger font size for values */
+  color: blue;
+}
+
+.grid-item .unit {
+  font-size: 0.8em; /* Smaller font size for units */
+  color: darkgray; /* Adjust color for units */
+}
+
 /*----------bootstrap-navbar-css------------*/
 .navbar-logo {
   padding: 15px;
@@ -168,7 +203,7 @@ footer {
   position: relative;
   width: 100%;
   background: #3586ff;
-  min-height: 100px;
+  min-height: 50px;
   padding: 20px 50px;
   display: flex;
   flex-direction: column;
@@ -177,7 +212,7 @@ footer {
   color: white;
 }
 
-footer .social_icon,
+/* footer .social_icon,
 footer .menu {
   position: relative;
   display: flex;
@@ -214,7 +249,8 @@ footer .menu li a {
 footer .menu li a:hover {
   opacity: 1;
   color: #fff;
-}
+} */
+
 p {
   color: white;
   text-align: center;
@@ -230,10 +266,10 @@ p {
 /*wave and animation*/
 footer .wave {
   position: absolute;
-  top: -100px;
+  top: -20px;
   left: 0;
   width: 100%;
-  height: 100px;
+  height: 20px;
   background: url(https://i.ibb.co/rZt4Nhg/wave.png);
   background-size: 1000px 100px;
 }
